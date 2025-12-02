@@ -116,8 +116,10 @@ export default function DocumentsPage() {
       file_url: '#',
       file_type: 'application/pdf',
       file_size: 5242880,
-      partner_tier_required: 'STARTER',
+      access_level: 'all',
+      is_premium: false,
       downloads: 145,
+      tags: ['sales', 'presentation', 'overview'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -129,8 +131,10 @@ export default function DocumentsPage() {
       file_url: '#',
       file_type: 'application/pdf',
       file_size: 2097152,
-      partner_tier_required: 'STARTER',
+      access_level: 'all',
+      is_premium: false,
       downloads: 89,
+      tags: ['case-study', 'spirits', 'success'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -142,8 +146,10 @@ export default function DocumentsPage() {
       file_url: '#',
       file_type: 'application/pdf',
       file_size: 1048576,
-      partner_tier_required: 'STARTER',
+      access_level: 'all',
+      is_premium: false,
       downloads: 234,
+      tags: ['one-pager', 'market-oracle', 'quick-ref'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -155,8 +161,10 @@ export default function DocumentsPage() {
       file_url: '#',
       file_type: 'application/pdf',
       file_size: 524288,
-      partner_tier_required: 'PROVEN',
+      access_level: 'certified',
+      is_premium: false,
       downloads: 56,
+      tags: ['contract', 'legal', 'template'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -168,8 +176,10 @@ export default function DocumentsPage() {
       file_url: '#',
       file_type: 'video/mp4',
       file_size: 52428800,
-      partner_tier_required: 'STARTER',
+      access_level: 'all',
+      is_premium: false,
       downloads: 178,
+      tags: ['training', 'video', 'objections'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -181,8 +191,10 @@ export default function DocumentsPage() {
       file_url: '#',
       file_type: 'application/xlsx',
       file_size: 262144,
-      partner_tier_required: 'ELITE',
+      access_level: 'elite',
+      is_premium: true,
       downloads: 23,
+      tags: ['pricing', 'enterprise', 'calculator'],
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -280,7 +292,7 @@ export default function DocumentsPage() {
                   {docs.map((doc) => {
                     const FileIcon = getFileIcon(doc.file_type)
                     const tierOrder = ['STARTER', 'PROVEN', 'ELITE', 'ELITE_PLUS']
-                    const hasAccess = partner ? tierOrder.indexOf(partner.tier) >= tierOrder.indexOf(doc.partner_tier_required) : false
+                    const hasAccess = partner ? tierOrder.indexOf(partner.tier) >= tierOrder.indexOf(doc.access_level) : false
 
                     return (
                       <div key={doc.id} className="bg-white rounded-xl p-5 border border-gray-100 card-hover">
@@ -299,8 +311,8 @@ export default function DocumentsPage() {
                           </div>
                         </div>
                         <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                          <span className={`text-xs px-2 py-1 rounded ${getTierColor(doc.partner_tier_required)}`}>
-                            {doc.partner_tier_required}+
+                          <span className={`text-xs px-2 py-1 rounded ${getTierColor(doc.access_level)}`}>
+                            {doc.access_level}+
                           </span>
                           {hasAccess ? (
                             <button className="flex items-center gap-1 text-purple-600 hover:text-purple-700 font-medium text-sm">
@@ -328,7 +340,7 @@ export default function DocumentsPage() {
           {displayDocuments.map((doc) => {
             const FileIcon = getFileIcon(doc.file_type)
             const tierOrder = ['STARTER', 'PROVEN', 'ELITE', 'ELITE_PLUS']
-            const hasAccess = partner ? tierOrder.indexOf(partner.tier) >= tierOrder.indexOf(doc.partner_tier_required) : false
+            const hasAccess = partner ? tierOrder.indexOf(partner.tier) >= tierOrder.indexOf(doc.access_level) : false
 
             return (
               <div key={doc.id} className="bg-white rounded-xl p-5 border border-gray-100 card-hover">
@@ -347,8 +359,8 @@ export default function DocumentsPage() {
                   </div>
                 </div>
                 <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                  <span className={`text-xs px-2 py-1 rounded ${getTierColor(doc.partner_tier_required)}`}>
-                    {doc.partner_tier_required}+
+                  <span className={`text-xs px-2 py-1 rounded ${getTierColor(doc.access_level)}`}>
+                    {doc.access_level}+
                   </span>
                   {hasAccess ? (
                     <button className="flex items-center gap-1 text-purple-600 hover:text-purple-700 font-medium text-sm">
