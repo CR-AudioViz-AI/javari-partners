@@ -82,6 +82,7 @@ export default function DashboardPage() {
           const statsData = await getDashboardStats(partnerData.id)
           if (statsData) {
             setStats(statsData)
+          }
         }
       }
     } catch (error) {
