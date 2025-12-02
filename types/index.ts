@@ -470,8 +470,9 @@ export interface UserProfile {
   full_name: string
   avatar_url?: string
   partner_id?: string
-  timezone: string
-  notification_preferences: {
+  role?: string
+  timezone?: string
+  notification_preferences?: {
     email_leads: boolean
     email_deals: boolean
     email_commissions: boolean
@@ -481,6 +482,7 @@ export interface UserProfile {
     sms_enabled: boolean
   }
   created_at: string
+  updated_at?: string
 }
 
 // ========== REWARDS ==========
