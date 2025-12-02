@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS partner_applications (
   expected_monthly_sales INTEGER NOT NULL,
   how_heard_about_us VARCHAR(255) NOT NULL,
   linkedin_url VARCHAR(500),
-  references TEXT,
+  partner_references TEXT,
   status VARCHAR(50) NOT NULL DEFAULT 'pending',
   reviewed_by UUID REFERENCES auth.users(id),
   review_notes TEXT,
