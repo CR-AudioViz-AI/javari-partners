@@ -1,6 +1,6 @@
 // ============================================================================
 // UNIVERSAL SUPABASE CLIENT - CRAV PARTNER PORTAL
-// Complete auth and data access layer - Returns { data, error } format
+// Complete auth and data access layer - Returns formats expected by pages
 // ============================================================================
 
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
@@ -34,7 +34,7 @@ export function createSupabaseServerClient(): SupabaseClient {
 }
 
 // ============================================================================
-// AUTH FUNCTIONS - Returns { data, error } format
+// AUTH FUNCTIONS - Returns formats expected by consuming pages
 // ============================================================================
 
 export async function signIn(email: string, password: string) {
@@ -61,11 +61,12 @@ export async function signOut() {
   return client.auth.signOut();
 }
 
-export async function getUser(): Promise<User | null> {
+// Returns { user } format for destructuring: const { user } = await getUser()
+export async function getUser(): Promise<{ user: User | null }> {
   const client = createSupabaseBrowserClient();
   const { data: { user }, error } = await client.auth.getUser();
-  if (error) { console.error('Error getting user:', error); return null; }
-  return user;
+  if (error) { console.error('Error getting user:', error); }
+  return { user: user || null };
 }
 
 export async function getSession() {
