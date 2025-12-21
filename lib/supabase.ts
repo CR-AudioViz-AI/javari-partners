@@ -1,6 +1,7 @@
 // ============================================================================
 // UNIVERSAL SUPABASE CLIENT - CRAV PARTNER PORTAL
-// Complete auth and data access layer - Returns { data, error } format
+// Complete auth and data access layer
+// All functions return { data, error } or { user } format to match page usage
 // ============================================================================
 
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
@@ -34,35 +35,39 @@ export function createSupabaseServerClient(): SupabaseClient {
 }
 
 // ============================================================================
-// AUTH FUNCTIONS - Returns { data, error } format
+// AUTH FUNCTIONS
 // ============================================================================
 
+// Returns { data, error } format - matches login page usage
 export async function signIn(email: string, password: string) {
   const client = createSupabaseBrowserClient();
   return client.auth.signInWithPassword({ email, password });
 }
 
+// Returns { data, error } format - accepts string (fullName) or object metadata
 export async function signUp(email: string, password: string, metadata?: string | Record<string, unknown>) {
   const client = createSupabaseBrowserClient();
-  // Handle both string (fullName) and object metadata formats
   const userData = typeof metadata === 'string' 
     ? { full_name: metadata } 
     : metadata;
   return client.auth.signUp({ email, password, options: { data: userData } });
 }
 
+// Returns { error } format
 export async function signOut() {
   const client = createSupabaseBrowserClient();
   return client.auth.signOut();
 }
 
-export async function getUser(): Promise<User | null> {
+// Returns { user } format - matches all dashboard page usages
+export async function getUser(): Promise<{ user: User | null }> {
   const client = createSupabaseBrowserClient();
   const { data: { user }, error } = await client.auth.getUser();
-  if (error) { console.error('Error getting user:', error); return null; }
-  return user;
+  if (error) { console.error('Error getting user:', error); }
+  return { user: user || null };
 }
 
+// Returns session or null
 export async function getSession() {
   const client = createSupabaseBrowserClient();
   const { data: { session }, error } = await client.auth.getSession();
