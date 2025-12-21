@@ -3,7 +3,7 @@
 // Complete auth and data access layer - Returns { data, error } format
 // ============================================================================
 
-import { createClient, SupabaseClient, User, AuthError } from '@supabase/supabase-js';
+import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://kteobfyferrukqeolofj.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0ZW9iZnlmZXJydWtxZW9sb2ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxOTcyNjYsImV4cCI6MjA3NzU1NzI2Nn0.uy-jlF_z6qVb8qogsNyGDLHqT4HhmdRhLrW7zPv3qhY';
@@ -42,9 +42,13 @@ export async function signIn(email: string, password: string) {
   return client.auth.signInWithPassword({ email, password });
 }
 
-export async function signUp(email: string, password: string, metadata?: Record<string, unknown>) {
+export async function signUp(email: string, password: string, metadata?: string | Record<string, unknown>) {
   const client = createSupabaseBrowserClient();
-  return client.auth.signUp({ email, password, options: { data: metadata } });
+  // Handle both string (full_name) and object metadata
+  const userMetadata = typeof metadata === 'string' 
+    ? { full_name: metadata } 
+    : metadata;
+  return client.auth.signUp({ email, password, options: { data: userMetadata } });
 }
 
 export async function signOut() {
