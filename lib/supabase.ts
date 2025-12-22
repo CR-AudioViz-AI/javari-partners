@@ -3,6 +3,7 @@
 // ============================================================================
 
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
+import { PartnerApplication } from '@/types';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://kteobfyferrukqeolofj.supabase.co';
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt0ZW9iZnlmZXJydWtxZW9sb2ZqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjIxOTcyNjYsImV4cCI6MjA3NzU1NzI2Nn0.uy-jlF_z6qVb8qogsNyGDLHqT4HhmdRhLrW7zPv3qhY';
@@ -125,17 +126,6 @@ export interface DashboardStats {
   conversionRate: number;
 }
 
-export interface PartnerApplication {
-  name: string;
-  email: string;
-  company?: string;
-  phone?: string;
-  website?: string;
-  experience?: string;
-  message?: string;
-  [key: string]: unknown;
-}
-
 // PARTNER FUNCTIONS
 export async function getPartnerByUserId(userId: string): Promise<Partner | null> {
   const { data, error } = await supabase.from('partners').select('*').eq('user_id', userId).single();
@@ -174,13 +164,14 @@ export async function getDashboardStats(partnerId: string): Promise<DashboardSta
   return { totalDeals, totalCommission, pendingCommission, conversionRate: Math.round(conversionRate * 10) / 10 };
 }
 
-export async function submitPartnerApplication(application: Record<string, unknown>): Promise<{ data: Partner | null; error: Error | null }> {
+// Returns PartnerApplication type from @/types
+export async function submitPartnerApplication(application: Record<string, unknown>): Promise<{ data: PartnerApplication | null; error: Error | null }> {
   try {
     const { data, error } = await supabase.from('partner_applications').insert(application).select().single();
     if (error) {
       return { data: null, error: new Error(error.message) };
     }
-    return { data: data as Partner, error: null };
+    return { data: data as PartnerApplication, error: null };
   } catch (err) {
     return { data: null, error: err instanceof Error ? err : new Error('Unknown error') };
   }
