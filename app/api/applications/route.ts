@@ -47,12 +47,18 @@ function __unauthorised() {
 
 export async function POST(request: NextRequest) {
   try {
+    // 2026-09-10: the gate above was written on 2026-09-06 but POST never called it,
+    // so any caller could file (or block) a partner application AS ANY USER by naming
+    // their user_id. The applicant is now always the signed-in caller; a user_id in the
+    // body is ignored. Nothing in the app calls this route, so no form changes.
+    const callerId = await __callerId(request)
+    if (!callerId) return __unauthorised()
     const supabase = createClient(SUPABASE_URL, supabaseServiceKey)
     const body = await request.json()
+    body.user_id = callerId
 
     // Validate required fields
     const requiredFields = [
-      'user_id',
       'company_name',
       'contact_name',
       'email',
